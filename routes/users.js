@@ -24,21 +24,25 @@ router.delete("/users/:id", async (req, res, next) => {
     res.json(deletedUser);
   } catch (error) {
     next(error);
+    console.log(error)
   }
 });
 
 router.post("/users", async (req, res, next) => {
   try {
+    const { name, surname, date_of_birth } = req.body;
+    console.log(req.body);
     const users = await prisma.user.create({
       data: {
-        name: "Jhon",
-        surname: "Smith",
-        date_of_birth: "1997.01.02",
+        name: name,
+        surname: surname,
+        date_of_birth: date_of_birth,
       },
     });
     res.json(users);
   } catch (error) {
     next(error);
+    console.log(error);
   }
 });
 
@@ -56,6 +60,20 @@ router.patch("/users/:id", async (req, res, next) => {
       },
     });
     res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/users/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const users = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.json(users);
   } catch (error) {
     next(error);
   }

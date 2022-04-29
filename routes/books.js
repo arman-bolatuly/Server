@@ -8,8 +8,8 @@ router.get("/books", async (req, res, next) => {
   try {
     //const { authorId } = req.params;
     const books = await prisma.books.findMany({
-      where: { published: true },
-      //include: { authotId: true },
+      //where: { published: true },
+      include: { author: true },
     });
     res.json(books);
   } catch (error) {
@@ -35,12 +35,12 @@ router.delete("/books/:id", async (req, res, next) => {
 // add book
 router.post("/books", async (req, res, next) => {
   try {
-    //const { name, year_of_release, authorId } = req.body;
+    const { name, year_of_release, authorId } = req.body;
     const books = await prisma.books.create({
       data: {
-        name: "Kental",
-        year_of_release: 1888,
-        authorId: 1,
+        name: name,
+        year_of_release: year_of_release,
+        authorId: authorId,
       },
     });
     res.json(books);
